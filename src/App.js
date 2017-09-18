@@ -121,25 +121,25 @@ class App extends Component {
   passoUm = (programa) => {
     var programaModificado;
 
-    return programa;
+    return programaModificado;
   }
 
-  passoDois = (passo) => {
+  passoDois = (programa) => {
     var programaModificado;
     
-    return programa;
+    return programaModificado;
   }
 
-  passoTres = (passo) => {
+  passoTres = (programa) => {
     var programaModificado;
     
-    return programa;
+    return programaModificado;
   }
 
-  passoQuatro = (passo) => {
+  passoQuatro = (programa1, programa2) => {
     var programaModificado;
     
-    return programa;
+    return programaModificado;
   }
 
   onChangePrimeiro = (text) => {
