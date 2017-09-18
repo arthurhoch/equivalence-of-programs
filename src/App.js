@@ -95,43 +95,51 @@ class App extends Component {
   gerarPasso = (passo) => {
     console.log(passo);
     
+    var stringPassos = ['primeiro', 'segundo']; 
+
     switch (++passo) {
       case 1:
-        this.passoUm(passo);
+        for (let p in stringPassos)
+          programas[passo][stringPassos[p]] = this.passoUm(programas[passo-1][p]);
         break;
       case 2:
-        this.passoDois(passo);
+        for (let p in stringPassos)
+          programas[passo][stringPassos[p]] = this.passoDois(programas[passo-1][p]);
         break;
       case 3:
-        this.passoTres(passo);
+        for (let p in stringPassos)
+          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-1][p]);
         break;
       case 4:
-        this.passoQuatro(passo);
+        programas[passo][stringPassos[p]] = this.passoQuatro(programas[passo-1][stringPassos[0]], programas[passo-1][stringPassos[1]]);
         break;
-
       default:
         break;
     }
   }
 
-  passoUm = (passo) => {
+  passoUm = (programa) => {
+    var programaModificado;
 
-
-    programas[passo].segundo = programas[passo-1].segundo.length.toString();
-
-
+    return programa;
   }
 
   passoDois = (passo) => {
-
+    var programaModificado;
+    
+    return programa;
   }
 
   passoTres = (passo) => {
-
+    var programaModificado;
+    
+    return programa;
   }
 
   passoQuatro = (passo) => {
-
+    var programaModificado;
+    
+    return programa;
   }
 
   onChangePrimeiro = (text) => {
