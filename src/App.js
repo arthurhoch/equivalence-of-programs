@@ -14,19 +14,33 @@ import AceEditor from 'react-ace';
 
 import './css/shared.css';
 import 'brace/theme/monokai';
+import Step1 from './Step1';
 
+
+// primeiro: 'faça F vá_para 2\n' +
+// 'se T então vá_para 1 senão vá_para 4\n' +
+// 'faça G vá_para 4\n' +
+// 'se T2 então vá_para 5 senão vá_para 1\n',
 
 var programas = [
   {
-    primeiro: 'faça F vá_para 2\n' +
+    primeiro: 
+    'se T1 então vá_para 2 senão vá_para 3\n' +
+    'faça G vá_para 1\n' +
+    'faça F vá_para 4\n' +
+    'se T2 então vá_para 5 senão vá_para 6\n' +
+    'faça F vá_para 4\n' +
+    'faça G vá_para 7\n' +
+    'se t3 então vá_para 8 senão vá_para 9\n' +
+    'faça F vá_para 10\n' +
+    'se t4 então vá_para 13 senão vá_para 7\n' +
+    'se t5 então vá_para 13 senão vá_para 11\n' +
+    'faça G vá_para 11\n',
+    segundo:
+    'faça F vá_para 2\n' +
     'se T então vá_para 1 senão vá_para 4\n' +
     'faça G vá_para 4\n' +
     'se T2 então vá_para 5 senão vá_para 1\n',
-    segundo:
-    'faça F vá_para 2\n' +
-    'se T então vá_para 1 senão vá_para 3\n' +
-    'faça G vá_para 4\n' +
-    'se T2 então vá_para 5 senão vá_para 1\n'
   }];
 
 class App extends Component {
@@ -100,18 +114,18 @@ class App extends Component {
     switch (++passo) {
       case 1:
         for (let p in stringPassos)
-          programas[passo][stringPassos[p]] = this.passoUm(programas[passo-1][p]);
+          programas[passo][stringPassos[p]] = this.passoUm(programas[passo-1][stringPassos[p]]);
         break;
       case 2:
         for (let p in stringPassos)
-          programas[passo][stringPassos[p]] = this.passoDois(programas[passo-1][p]);
+          programas[passo][stringPassos[p]] = this.passoDois(programas[passo-1][stringPassos[p]]);
         break;
       case 3:
         for (let p in stringPassos)
-          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-1][p]);
+          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-1][stringPassos[p]]);
         break;
       case 4:
-        programas[passo][stringPassos[p]] = this.passoQuatro(programas[passo-1][stringPassos[0]], programas[passo-1][stringPassos[1]]);
+        programas[passo][stringPassos[0]] = this.passoQuatro(programas[passo-1][stringPassos[0]], programas[passo-1][stringPassos[1]]);
         break;
       default:
         break;
@@ -119,15 +133,11 @@ class App extends Component {
   }
 
   passoUm = (programa) => {
-    var programaModificado;
-
-    return programaModificado;
+    return Step1.formalizeProgram(programa);
   }
 
   passoDois = (programa) => {
-    var programaModificado;
-    
-    return programaModificado;
+    // return Step1.formalizeProgram(programa);
   }
 
   passoTres = (programa) => {
