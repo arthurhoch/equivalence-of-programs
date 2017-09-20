@@ -14,7 +14,7 @@ const generateChainSets = (programa) => {
     
         // Variavel acumuladora criada para concatenar todos os conjuntos gerados
         // Ex: '2 = {&; 4; 3}'
-        var programChainSets = chainSetLineCounter + ' = {&} \n';
+        var finiteChainSet = chainSetLineCounter + ' = {&} \n';
         
         // Variavel acumuladora criada com o intuito de armazenar os valores dos 
         // conjuntos anteriores, separado do indice da nova linha gerada
@@ -38,27 +38,37 @@ const generateChainSets = (programa) => {
             // verifica todas as linhas buscando as operacoes que sao iguais
             for (var x = programa.length -1; x >= 0; x--) {
                 var subLineSplited = programa[x].split(" ");
-                // Compara as operacoes das linhas sendo percorridas
+                // Verifica se as operacoes das duas linhas sao iguais
                 if ((lineSplited[1] === subLineSplited[1]) && (lineSplited[2] === subLineSplited[2])) {
-    
-                    // Verifica se a linha sendo percorrida ja esta em algum conjunto
-                    var novoValor = '; ' + subLineSplited[0].split(':')[0]; // 2: (G,1), (G,1) 
-                    if (programChainSets.indexOf(novoValor) === -1) {
-                        // Caso nao esteja, o seu indice e adicionado no conjunto
-                        chainSet += novoValor;
+
+                    // Obtem o novo valor para inseri-lo no conjunto
+                    var newChainSet = subLineSplited[0].split(':')[0]; // 2: (G,1), (G,1) 
+                   
+                    
+                    // Verifica se o novo valor gerado ja esta no conjunto
+                    // chainSet = '; 3; 2; 1'
+                    var chainSetDuplicated = chainSet.split("; ").filter((item) => {
+                        if (item === newChainSet) {
+                            return item;
+                        }
+                    })[0];
+                    
+                    // Caso nao esteja, o seu indice e adicionado no conjunto
+                    if (chainSetDuplicated === undefined) {
+                        chainSet += '; ' + newChainSet;
                     }
                 }
             }
     
             var currentChainSet = chainSetLineCounter + ' = {&' + chainSet + '}' + '\n';
-            // Verifica se o novo conjunto ja foi gerado anteriormente
-            var indexOf = programChainSets.indexOf(currentChainSet.split('= ')[1]); // 1 = {&; 10}
+            // Verifica se o novo conjunto gerado ja esta inserido no conjunto
+            var indexOf = finiteChainSet.search(currentChainSet.split('= ')[1]); // 1 = {&; 10}
             if (indexOf === -1) {
-                programChainSets += currentChainSet;
+                finiteChainSet += currentChainSet;
             }
         }
     
-        return programChainSets;
+        return finiteChainSet;
     };
     
     /**
