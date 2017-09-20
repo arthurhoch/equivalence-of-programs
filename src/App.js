@@ -15,6 +15,7 @@ import AceEditor from 'react-ace';
 import './css/shared.css';
 import 'brace/theme/monokai';
 import Step1 from './Step1';
+import Step2 from './Step2';
 
 
 // primeiro: 'faça F vá_para 2\n' +
@@ -137,7 +138,7 @@ class App extends Component {
   }
 
   passoDois = (programa) => {
-    // return Step1.formalizeProgram(programa);
+    return Step2.generateChainSets(programa);
   }
 
   passoTres = (programa) => {
