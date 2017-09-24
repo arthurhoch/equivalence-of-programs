@@ -13,8 +13,8 @@ const generateChainSets = (programa) => {
         var chainSetLineCounter = 0; // Contador dos conjuntos gerados
     
         // Variavel acumuladora criada para concatenar todos os conjuntos gerados
-        // Ex: '2 = {&; 4; 3}'
-        var finiteChainSet = chainSetLineCounter + ' = {&} \n';
+        // Ex: '2 = {Σ; 4; 3}'
+        var finiteChainSet = chainSetLineCounter + ' = {Σ} \n';
         
         // Variavel acumuladora criada com o intuito de armazenar os valores dos 
         // conjuntos anteriores, separado do indice da nova linha gerada
@@ -60,9 +60,9 @@ const generateChainSets = (programa) => {
                 }
             }
     
-            var currentChainSet = chainSetLineCounter + ' = {&' + chainSet + '}' + '\n';
+            var currentChainSet = chainSetLineCounter + ' = {Σ' + chainSet + '}' + '\n';
             // Verifica se o novo conjunto gerado ja esta inserido no conjunto
-            var indexOf = finiteChainSet.search(currentChainSet.split('= ')[1]); // 1 = {&; 10}
+            var indexOf = finiteChainSet.search(currentChainSet.split('= ')[1]); // 1 = {Σ; 10}
             if (indexOf === -1) {
                 finiteChainSet += currentChainSet;
             }
@@ -84,7 +84,7 @@ const generateChainSets = (programa) => {
             var lineSplited = arr[lineIndex].split(" ");
     
             // Verifica se a operacao eh uma parada
-            if (lineSplited[1] === '(parada,&),') {
+            if (lineSplited[1] === '(parada,Σ),') {
                 index = lineIndex;
             }
         };

@@ -1,104 +1,146 @@
+var lineIndex = 0;
 
 /**
- * Funcao criada para formalizar um programa
+ * Funcao criada para formalizar um program
  * 
- * @param {Array} programa Todas as instrucoes do programa inicial
+ * @param {Array} program Todas as instrucoes do program inicial
  */
-const formalizeProgram = (programa) => {
+const formalizeProgram = (program) => {
 
-    // Remove os elementos do array que nao nao possuem nenhum valor
-    programa = programa.split('\n').filter(function(item){
-        if (item !== "") {
-            return item;
+    var programFormalized = '';
+    program = enumararInstrucoes(program);
+
+    program.forEach((programLineObj, programLineIndex) => {
+        // Verifica se a linha do program eh uma operacao ou um teste
+        if (programLineObj.type === "test") {
+            // Somente executa um teste como se fosse uma operacao, se for o inicio do program
+            if (programLineObj.index === 0) {
+                var labeledInstructionFromTestTrue = getLabeledInstructionByTeste(program, programLineObj.indexOperTrue, true, programLineObj.index);
+                var labeledInstructionFromTestFalse = getLabeledInstructionByTeste(program, programLineObj.indexOperFalse, false, programLineObj.index);
+                programFormalized += ++lineIndex + ": " + labeledInstructionFromTestTrue + ", " + labeledInstructionFromTestFalse + "\n";
+            }
+        } else {
+            // Acrescenta uma linha ao program formalizado
+            programFormalized += ++lineIndex + ": " + getLabeledInstructionsByOper(program, programLineObj.indexNextOper) + "\n";
         }
     });
-    
-    var programFormalized = '';
-
-    // Percorre todas as linhas do programa
-    for (var lineIndex = 0; lineIndex < programa.length; lineIndex++) {
-
-        // Divide a linha de acordo com os espacos em brancos
-        var lineSplited = programa[lineIndex].split(" ");
-
-        // Verifica se a linha do programa eh uma operacao ou um teste
-        if (lineSplited[0] == 'faça' || lineSplited[0] == 'faca') {
-            var oper = '';
-            // Obtem a linha que a instrucao atual ira executar
-            var indexNextLine = parseInt(lineSplited[3]) - 1;
-            if (indexNextLine >= programa.length) {
-                // Caso a linha a ser executada nao exista, eh uma parada
-                oper = '(parada,&)';
-            } else {
-                oper = '(' + lineSplited[1] + ',' + lineSplited[3] + ')';
-            }
-
-            // Acrescenta uma linha ao programa formalizado
-            programFormalized += (lineIndex + 1) + ': ' + oper + ', ' + oper + ' \n';
-
-        } else if (lineSplited[0] == 'se') {
-
-            // Obtem o indice da linha que ira ser executada se a condicao for verdadeira 
-            var indexOperTrue = parseInt(lineSplited[4]) - 1;
-            // Obtem o indice da linha que ira ser executada se a condicao for falsa
-            var indexOperFalse = parseInt(lineSplited[7]) - 1;
-
-            //Obtem a proxima instrucao a ser executada caso o teste for verdadeiro
-            var operTrue = getOperFromTeste(programa, indexOperTrue, true, indexOperTrue, true);
-            //Obtem a proxima instrucao a ser executada caso o teste for falso
-            var operFalse = getOperFromTeste(programa, indexOperFalse, false, indexOperFalse, true);
-
-            // Acrescenta uma linha ao programa formalizado
-            programFormalized += (lineIndex + 1) + ': ' + operTrue + ', ' + operFalse + ' \n';
-        }
-    }
 
     return programFormalized;
 }
 
 /**
- * Funcao recursiva criada para obter a proxima instrucao a 
- * ser executada de um teste que pode ter outros testes encadeados
+ * Funcao criada para obter as instrucoes rotuladas 
+ * a ser executada por uma operacao
  * 
- * @param {Array} arr Todas as instrucoes do programa inicial
- * @param {Number} indexTestExec Indice da linha que o teste ira executar
- * @param {Boolean} isTrue Especifica se eh para retornar a instrucao verdadeira ou falsa do teste
- * @param {Number} firstIndexTest Indice do primeiro teste quando foi chamado a funcao(usado para detectar ciclo infinito)
- * @param {Boolean} isFirstTest Especifica se eh a primeira vez que esta sendo executada a funcao recursiva
+ * @param {Array} program 
+ * @param {Number} indexNextOper 
  */
-const getOperFromTeste = (arr, indexTestExec, isTrue, firstIndexTest, isFirstTest) => {
-    // Se a proxima instrucao a ser executada pelo teste nao existir, retorna uma parada
-    if (indexTestExec >= arr.length) {
-        return '(parada,&)';
-    // Se nao for a primeira chamada da funcao recursiva, 
-    // e se o indice da linha que o teste ira executar for igual ao primeiro indice testado, 
-    // retorna um ciclo infinito
-    } else if (!isFirstTest && indexTestExec === firstIndexTest) {
-        return '(ciclo,w)';
-    } else {
-        // Obtem a linha que o teste ira executar
-        var lineOperSplited = arr[indexTestExec].split(" ");
-        // Se a prox instrucao a ser executada for um teste
-        if (lineOperSplited[0] == 'se') {
-            var indexNewTeste;
-            // Obtem o indice da prox Linha a ser executada pelo teste, 
-            // de acordo com a condicao do teste recebida por parametro(true or false)
-            if (isTrue) {
-                indexNewTeste = parseInt(lineOperSplited[4]) - 1;
-            } else {
-                indexNewTeste = parseInt(lineOperSplited[7]) - 1;
-            }
-            // Rechama a funcao recursiva passando o indico do proximo teste por parametro
-            return getOperFromTeste(arr, indexNewTeste, isTrue, firstIndexTest, false);
-        } else {
-            // Caso a proxima instrucao existir e nao for um teste, retorna a operacao 
-            if (lineOperSplited[1] !== undefined && lineOperSplited[3] !== undefined) {
-                return '(' + lineOperSplited[1] + ',' + lineOperSplited[3] + ')';    
-            } else {
-                return '(parada,&)';
-            }
+const getLabeledInstructionsByOper = (program, indexNextOper) => {
+    // Obtem o indice da linha que a operacao ira executar
+    var oper = program.filter((item) => {
+        if (item.index === indexNextOper - 1/** -1 pois o indice do array comeca com 0*/) {
+            return item;
         }
+    })[0];
+
+    if (oper !== undefined) {
+        // Verifica se a operacao eh um teste
+        if (oper.type === "test") {
+            // Se for um teste, obtem o rotulo que ira executar
+            var labeledInstructionFromTestTrue = getLabeledInstructionByTeste(program, oper.indexOperTrue, true, oper.index);
+            var labeledInstructionFromTestFalse = getLabeledInstructionByTeste(program, oper.indexOperFalse, false, oper.index);
+            return labeledInstructionFromTestTrue + ', ' + labeledInstructionFromTestFalse;
+        } else {
+            // Se nao for um teste, simplismente retorna o rotulo da operacao
+            return oper.labeledInstruction + ', ' + oper.labeledInstruction;
+        }
+    } else {
+        // Se a proxima instrucao a ser executada nao existir, retorna uma parada
+        return '(parada,Σ), (parada,Σ)';
     }
+}
+
+/**
+ * Funcao recursiva criada para obter a instrucao rotulada 
+ * a ser executada por um teste ou mais testes encadeados
+ * 
+ * @param {Array} program Todas as instrucoes do program inicial enumaeradas
+ * @param {Number} indexOperFromTeste Indice da linha que o teste ira executar
+ * @param {Boolean} isIndexOperFromTesteTrue Especifica se eh para retornar a instrucao verdadeira ou falsa do teste
+ * @param {Number} firstIndexTest Indice do primeiro teste quando foi chamado a funcao(usado para detectar ciclo infinito)
+ */
+const getLabeledInstructionByTeste = (program, indexOperFromTeste, isIndexOperFromTesteTrue, firstIndexTest) => {
+    // Obtem o indice da linha que o teste ira executar
+    var operFromTeste = program.filter((item) => {
+        if (item.index === indexOperFromTeste) {
+            return item;
+        }
+    })[0];
+
+    if (operFromTeste !== undefined) {
+        // Verifica se possuem testes encadeados
+        if (operFromTeste.type === "test") {
+            // Caso o teste encadeado for igual ao primeiro teste, eh um ciclo inifito
+            if (firstIndexTest === operFromTeste.index) {
+                return '(ciclo,ω)';
+            }
+            // Se nao for um ciclo infinito, rechama a funcao ate encontrar a operacao true ou false(conforme recebido pelos parametros)
+            if (isIndexOperFromTesteTrue) {
+                return getLabeledInstructionByTeste(program, operFromTeste.indexOperTrue, isIndexOperFromTesteTrue, firstIndexTest)
+            } else {
+                return getLabeledInstructionByTeste(program, operFromTeste.indexOperFalse, isIndexOperFromTesteTrue, firstIndexTest)
+            }
+        } else {
+            // Se nao for um teste, retorna a instrucao rotulada da operacao
+            return operFromTeste.labeledInstruction;
+        }
+    } else {
+        // Se a proxima instrucao a ser executada pelo teste nao existir, retorna uma parada
+        return '(parada,Σ)';
+    }
+}
+
+var contOper = 1;
+
+/**
+ * Funcao criada para organizar as linhas do program em uma lista de objetos,
+ * enumerando as instrucoes e os testes
+ * 
+ * @param {Array} arr Todas as instrucoes do program inicial
+ */
+const enumararInstrucoes = (arr) => {
+
+    // Remove os elementos do array que nao nao possuem nenhum valor
+    arr = arr.split('\n').filter(function(item) {
+        if (item !== "") {
+            return item;
+        }
+    });
+
+    // O primeiro rotulo inicia com 2 por que a partida e considerado o primeiro
+    contOper++;
+
+    var newArr = [];
+    arr.filter((programLine, index) => {
+        var programLineSplited = programLine.split(" ");
+        if (programLineSplited[0] === 'se') {
+            newArr[index] = {
+                index: index,
+                type: 'test',
+                indexOperTrue: parseInt(programLineSplited[4]) - 1, //indice da linha que ira ser executada se a condicao for verdadeira 
+                indexOperFalse: parseInt(programLineSplited[7] - 1), //indice da linha que ira ser executada se a condicao for falsa 
+            };
+        } else {
+            newArr[index] = {
+                index: index,
+                labeledInstruction: '(' + programLineSplited[1] + ',' + contOper + ')',
+                type: 'oper',
+                indexNextOper: parseInt(programLineSplited[3])
+            };
+            contOper++;
+        }
+    })
+    return newArr;
 }
 
 module.exports = {

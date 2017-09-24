@@ -23,6 +23,13 @@ import Step2 from './Step2';
 // 'faça G vá_para 4\n' +
 // 'se T2 então vá_para 5 senão vá_para 1\n',
 
+// 'faça F vá_para 2\n' +
+// 'se T então vá_para 1 senão vá_para 4\n' +
+// 'faça G vá_para 4\n' +
+// 'se T2 então vá_para 5 senão vá_para 1\n',
+
+
+
 var programas = [
   {
     primeiro: 
@@ -38,10 +45,15 @@ var programas = [
     'se t5 então vá_para 13 senão vá_para 11\n' +
     'faça G vá_para 11\n',
     segundo:
-    'faça F vá_para 2\n' +
-    'se T então vá_para 1 senão vá_para 4\n' +
-    'faça G vá_para 4\n' +
-    'se T2 então vá_para 5 senão vá_para 1\n',
+    'se T1 então vá_para 2 senão vá_para 3\n' +
+    'faça G vá_para 1\n' +
+    'faça F vá_para 4\n' +
+    'se T2 então vá_para 3 senão vá_para 5\n' +
+    'faça G vá_para 6\n' +
+    'se T3 então vá_para 7 senão vá_para 8\n' +
+    'faça F vá_para 9\n' +
+    'faça F vá_para 8\n' +
+    'se T4 então vá_para 10 senão vá_para 6\n' 
   }];
 
 class App extends Component {
