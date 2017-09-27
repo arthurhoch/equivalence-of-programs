@@ -14,19 +14,46 @@ import AceEditor from 'react-ace';
 
 import './css/shared.css';
 import 'brace/theme/monokai';
+import Step1 from './Step1';
+import Step2 from './Step2';
+
+
+// primeiro: 'faça F vá_para 2\n' +
+// 'se T então vá_para 1 senão vá_para 4\n' +
+// 'faça G vá_para 4\n' +
+// 'se T2 então vá_para 5 senão vá_para 1\n',
+
+// 'faça F vá_para 2\n' +
+// 'se T então vá_para 1 senão vá_para 4\n' +
+// 'faça G vá_para 4\n' +
+// 'se T2 então vá_para 5 senão vá_para 1\n',
+
 
 
 var programas = [
   {
-    primeiro: 'faça F vá_para 2\n' +
-    'se T então vá_para 1 senão vá_para 4\n' +
-    'faça G vá_para 4\n' +
-    'se T2 então vá_para 5 senão vá_para 1\n',
+    primeiro: 
+    'se T1 então vá_para 2 senão vá_para 3\n' +
+    'faça G vá_para 1\n' +
+    'faça F vá_para 4\n' +
+    'se T2 então vá_para 5 senão vá_para 6\n' +
+    'faça F vá_para 4\n' +
+    'faça G vá_para 7\n' +
+    'se t3 então vá_para 8 senão vá_para 9\n' +
+    'faça F vá_para 10\n' +
+    'se t4 então vá_para 13 senão vá_para 7\n' +
+    'se t5 então vá_para 13 senão vá_para 11\n' +
+    'faça G vá_para 11\n',
     segundo:
-    'faça F vá_para 2\n' +
-    'se T então vá_para 1 senão vá_para 3\n' +
-    'faça G vá_para 4\n' +
-    'se T2 então vá_para 5 senão vá_para 1\n'
+    'se T1 então vá_para 2 senão vá_para 3\n' +
+    'faça G vá_para 1\n' +
+    'faça F vá_para 4\n' +
+    'se T2 então vá_para 3 senão vá_para 5\n' +
+    'faça G vá_para 6\n' +
+    'se T3 então vá_para 7 senão vá_para 8\n' +
+    'faça F vá_para 9\n' +
+    'faça F vá_para 8\n' +
+    'se T4 então vá_para 10 senão vá_para 6\n' 
   }];
 
 class App extends Component {
@@ -95,43 +122,47 @@ class App extends Component {
   gerarPasso = (passo) => {
     console.log(passo);
     
+    var stringPassos = ['primeiro', 'segundo']; 
+
     switch (++passo) {
       case 1:
-        this.passoUm(passo);
+        for (let p in stringPassos)
+          programas[passo][stringPassos[p]] = this.passoUm(programas[passo-1][stringPassos[p]]);
         break;
       case 2:
-        this.passoDois(passo);
+        for (let p in stringPassos)
+          programas[passo][stringPassos[p]] = this.passoDois(programas[passo-1][stringPassos[p]]);
         break;
       case 3:
-        this.passoTres(passo);
+        for (let p in stringPassos)
+          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-1][stringPassos[p]]);
         break;
       case 4:
-        this.passoQuatro(passo);
+        programas[passo][stringPassos[0]] = this.passoQuatro(programas[passo-1][stringPassos[0]], programas[passo-1][stringPassos[1]]);
         break;
-
       default:
         break;
     }
   }
 
-  passoUm = (passo) => {
-
-
-    programas[passo].segundo = programas[passo-1].segundo.length.toString();
-
-
+  passoUm = (programa) => {
+    return Step1.formalizeProgram(programa);
   }
 
-  passoDois = (passo) => {
-
+  passoDois = (programa) => {
+    return Step2.generateChainSets(programa);
   }
 
-  passoTres = (passo) => {
-
+  passoTres = (programa) => {
+    var programaModificado;
+    
+    return programaModificado;
   }
 
-  passoQuatro = (passo) => {
-
+  passoQuatro = (programa1, programa2) => {
+    var programaModificado;
+    
+    return programaModificado;
   }
 
   onChangePrimeiro = (text) => {
