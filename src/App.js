@@ -16,6 +16,7 @@ import './css/shared.css';
 import 'brace/theme/monokai';
 import Step1 from './Step1';
 import Step2 from './Step2';
+import Step3 from './Step3';
 
 
 // primeiro: 'faça F vá_para 2\n' +
@@ -64,7 +65,7 @@ class App extends Component {
       steps: [{
         title: 'Programas',
         onClick: (e) => {
-          this.setCurrentState(0);
+          this.setCurrentState(1);
         }
       }, {
         title: 'Passo 1',
@@ -127,7 +128,7 @@ class App extends Component {
     switch (++passo) {
       case 1:
         for (let p in stringPassos)
-          programas[passo][stringPassos[p]] = this.passoUm(programas[passo-1][stringPassos[p]]);
+          programas[passo][stringPassos[p]] = this.passoUm(programas[passo-1][stringPassos[p]], p);
         break;
       case 2:
         for (let p in stringPassos)
@@ -135,7 +136,7 @@ class App extends Component {
         break;
       case 3:
         for (let p in stringPassos)
-          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-1][stringPassos[p]]);
+          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-2][stringPassos[p]]);
         break;
       case 4:
         programas[passo][stringPassos[0]] = this.passoQuatro(programas[passo-1][stringPassos[0]], programas[passo-1][stringPassos[1]]);
@@ -145,8 +146,8 @@ class App extends Component {
     }
   }
 
-  passoUm = (programa) => {
-    return Step1.formalizeProgram(programa);
+  passoUm = (programa, p) => {
+    return Step1.formalizeProgram(programa, p);
   }
 
   passoDois = (programa) => {
@@ -154,9 +155,7 @@ class App extends Component {
   }
 
   passoTres = (programa) => {
-    var programaModificado;
-    
-    return programaModificado;
+    return Step3.simplificacao(programa);
   }
 
   passoQuatro = (programa1, programa2) => {

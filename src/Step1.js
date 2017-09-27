@@ -5,7 +5,10 @@ var lineIndex = 0;
  * 
  * @param {Array} program Todas as instrucoes do program inicial
  */
-const formalizeProgram = (program) => {
+const formalizeProgram = (program, p) => {
+
+    if (p == 0)
+        lineIndex = 0;
 
     var programFormalized = '';
     program = enumararInstrucoes(program);
@@ -111,7 +114,7 @@ var contOper = 1;
 const enumararInstrucoes = (arr) => {
 
     // Remove os elementos do array que nao nao possuem nenhum valor
-    arr = arr.split('\n').filter(function(item) {
+    arr = arr.split('\n').filter(function (item) {
         if (item !== "") {
             return item;
         }
