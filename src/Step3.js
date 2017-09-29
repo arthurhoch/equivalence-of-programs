@@ -3,17 +3,67 @@ const simplificacao = (programa) => {
 
     var programaArray = toArray(programa);
     programaArray = removeRepetidos(programaArray);
-
+    programaArray = verificarCicloInfinito(programaArray);
 
     programa = array2String(programaArray);
     return programa;
 }
 
-const cortarUltimaParada = (input) => {
-    //Cortar o array onde a linha corresponder a ultima parada
-}
-
 const verificarCicloInfinito = (input) => {
+
+    var i = 0;
+
+    var ultimaParada = 0;
+    for (i = 0; i < input.length; i++) {
+        if ( input[i].includes("(parada,Σ)")) {
+            ultimaParada = i;
+        }
+    }
+    var trocarPorCiclo = [];
+
+    for (i = ultimaParada; i < input.length; i++) {
+        var elementos = input[i].split(", ");
+        
+        if (elementos.length > 0) {
+            if (elementos[0] === elementos[1]) {
+                if (elementos[0] != "(ciclo,ω)") {
+                    trocarPorCiclo.push(elementos[0]);
+                }
+            }
+        }
+    }
+    var j = 0;
+    for (i = 0; i < trocarPorCiclo.length; i++) {
+        for (j = 0; j < input.length; j++) {
+
+            var elementos = input[j].split(", ");
+
+            if ( elementos[0].includes(trocarPorCiclo[i])) {
+                elementos[0] = "(ciclo,ω)";
+            }
+            if ( elementos[1].includes(trocarPorCiclo[i])) {
+                elementos[1] = "(ciclo,ω)";
+            }
+
+            input[j] = elementos[0] + ", " + elementos[1];
+
+
+        }
+    }
+
+    ultimaParada = 0;
+
+    for (i = 0; i < input.length; i++) {
+        if (input[i].includes("(ciclo,ω)") && input[i].includes("(parada,Σ)")) {
+            ultimaParada = i;
+            break;
+        } else if (input[i].includes("(parada,Σ)")) {
+            ultimaParada = i;
+        }
+    }
+
+    return input.slice(0, ultimaParada+1);
+
     //Verficar se dois itens de determinada linha são iguai caso forem trocar em todos os lugares esse item por (ciclo, w)
 }
 
