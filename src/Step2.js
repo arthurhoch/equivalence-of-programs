@@ -14,7 +14,7 @@ const generateChainSets = (programa) => {
     
         // Variavel acumuladora criada para concatenar todos os conjuntos gerados
         // Ex: '2 = {Σ; 4; 3}'
-        var finiteChainSet = chainSetLineCounter + ' = {Σ} \n';
+        var finiteChainSet = "A" + chainSetLineCounter + ' = {Σ} \n';
         
         // Variavel acumuladora criada com o intuito de armazenar os valores dos 
         // conjuntos anteriores, separado do indice da nova linha gerada
@@ -60,7 +60,7 @@ const generateChainSets = (programa) => {
                 }
             }
     
-            var currentChainSet = chainSetLineCounter + ' = {Σ' + chainSet + '}' + '\n';
+            var currentChainSet = "A" + chainSetLineCounter + ' = {Σ' + chainSet + '}' + '\n';
             // Verifica se o novo conjunto gerado ja esta inserido no conjunto
             var indexOf = finiteChainSet.search(currentChainSet.split('= ')[1]); // 1 = {Σ; 10}
             if (indexOf === -1) {

@@ -7,8 +7,8 @@ var lineIndex = 0;
  */
 const formalizeProgram = (program, p) => {
 
-    if (p == 0)
-        lineIndex = 0;
+    if (p == 0) { lineIndex = 0; contOper = 1; }
+
 
     var programFormalized = '';
     program = enumararInstrucoes(program);
