@@ -9,6 +9,8 @@ const verificarEquivalencia = (programa1, programa2, p) => {
 
     var output = "B" + verificacao++ + " = {" + programa1[0] +", "+ programa2[0] +"}";
 
+    //var p1 = removeRepetidos(programa1);
+    //var p2 = removeRepetidos(programa2);
 
     var programa1Estrutura = gerarEstrutura(programa1);
     var programa2Estrutura = gerarEstrutura(programa2);
@@ -22,12 +24,18 @@ const verificarEquivalencia = (programa1, programa2, p) => {
         output += "\nProgramas equivalentes !"
     }
 
-    return output;
+    return output + "\n" + verificacaoForte(programa1Estrutura, programa2Estrutura, verificacao);
 }
 
 const verificacaoForte = (programa1Estrutura, programa2Estrutura, verificacao) => {
     var output = "";
 
+    var max = programa1Estrutura.length > programa2Estrutura.length ? programa2Estrutura.length : programa1Estrutura.length;
+    var x = 0;
+    var string = "";
+    for (x = 0; x < max; x++) {
+        output += "(" + programa1Estrutura[x].tagNum + ", " + programa2Estrutura[x].tagNum + ") B" + verificacao++ + "={" + programa1Estrutura[x].valor1 + ", " + programa2Estrutura[x].valor1 + "}," + " {" + programa1Estrutura[x].valor2 + ", " + programa2Estrutura[x].valor2 + "}\n";
+    }
 
 
     return output;
@@ -35,7 +43,7 @@ const verificacaoForte = (programa1Estrutura, programa2Estrutura, verificacao) =
 
 const removeRepetidos = (input) => {
     
-        var uniqueArray = input.filter(function(item, pos) {
+        var uniqueArray = input.split("\n").filter(function(item, pos) {
             return input.indexOf(item.split(":")[1]) === pos.split(":")[1];
         });
     
