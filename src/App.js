@@ -17,6 +17,7 @@ import 'brace/theme/monokai';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
+import Step4 from './Step4';
 
 
 // primeiro: 'faça F vá_para 2\n' +
@@ -136,10 +137,11 @@ class App extends Component {
         break;
       case 3:
         for (let p in stringPassos)
-          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-2][stringPassos[p]]);
+          programas[passo][stringPassos[p]] = this.passoTres(programas[passo-2][stringPassos[p]], p);
         break;
       case 4:
-        programas[passo][stringPassos[0]] = this.passoQuatro(programas[passo-1][stringPassos[0]], programas[passo-1][stringPassos[1]]);
+        for (let p in stringPassos)
+          programas[passo][stringPassos[p]] = this.passoQuatro(programas[passo-1][stringPassos[0]], programas[passo-1][stringPassos[1]], p);
         break;
       default:
         break;
@@ -154,14 +156,12 @@ class App extends Component {
     return Step2.generateChainSets(programa);
   }
 
-  passoTres = (programa) => {
-    return Step3.simplificacao(programa);
+  passoTres = (programa, p) => {
+    return Step3.simplificacao(programa, p);
   }
 
-  passoQuatro = (programa1, programa2) => {
-    var programaModificado;
-    
-    return programaModificado;
+  passoQuatro = (programa1, programa2, p) => {
+    return Step4.verificarEquivalencia(programa1, programa2, p);
   }
 
   onChangePrimeiro = (text) => {
@@ -196,7 +196,7 @@ class App extends Component {
 
 
         <Row>
-          <Col mdOffset={1} md={6}>
+          <Col mdOffset={1} sm={6}>
             <h3>Programa 1</h3>
             <AceEditor className="editor"
               theme={"monokai"}
@@ -207,7 +207,7 @@ class App extends Component {
                 $blockScrolling: Infinity
               }} />
           </Col>
-          <Col md={6}>
+          <Col sm={6}>
             <h3>Programa 2</h3>
             <AceEditor className="editor"
               theme={"monokai"}

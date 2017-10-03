@@ -1,4 +1,9 @@
-const simplificacao = (programa) => {
+var rotulo = 0;
+
+const simplificacao = (programa, p) => {
+
+    rotulo = programa[0]-1;
+
     programa = removeLixo(programa);
 
     var programaArray = toArray(programa);
@@ -26,7 +31,7 @@ const verificarCicloInfinito = (input) => {
         
         if (elementos.length > 0) {
             if (elementos[0] === elementos[1]) {
-                if (elementos[0] != "(ciclo,ω)") {
+                if (elementos[0] != "(ciclo,ω)" && elementos[0] != "(parada,Σ)") {
                     trocarPorCiclo.push(elementos[0]);
                 }
             }
@@ -69,18 +74,19 @@ const verificarCicloInfinito = (input) => {
 
 const removeRepetidos = (input) => {
 
-    var uniqueArray = input.filter(function(item, pos) {
-        return input.indexOf(item) === pos;
-    });
+    //var uniqueArray = input.filter(function(item, pos) {
+    //    return input.indexOf(item) === pos;
+    //});
 
-    return uniqueArray;
+    //return uniqueArray;
+    return input;
 }
 
 const array2String = (input) => {
     var programa = "";
     var i = 0;
     for (i = 0; i < input.length; i++) {
-        programa += input[i] + "\n";
+        programa += ++rotulo + ": " + input[i] + "\n";
     }
 
     return programa;
