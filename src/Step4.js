@@ -15,13 +15,9 @@ const verificarEquivalencia = (programa1, programa2, p) => {
     var programa1Estrutura = gerarEstrutura(p1);
     var programa2Estrutura = gerarEstrutura(p2);
 
-    if (true) {
-        output += "\nProgramas diferente !"
-    } else {
-        output += "\nProgramas equivalentes !"
-    }
+    
 
-    return output + "\n" + verificacaoForte(programa1Estrutura, programa2Estrutura, verificacao);
+    return output + "\n\n" + verificacaoForte(programa1Estrutura, programa2Estrutura, verificacao);
 }
 
 const verificacaoForte = (programa1Estrutura, programa2Estrutura, verificacao) => {
@@ -30,9 +26,42 @@ const verificacaoForte = (programa1Estrutura, programa2Estrutura, verificacao) =
     var max = programa1Estrutura.length > programa2Estrutura.length ? programa2Estrutura.length : programa1Estrutura.length;
     var x = 0;
     var string = "";
+    var eEquivalente = true;
     for (x = 0; x < max; x++) {
         output += "(" + programa1Estrutura[x].tagNum + ", " + programa2Estrutura[x].tagNum + ") B" + verificacao++ + "={" + programa1Estrutura[x].valor1 + ", " + programa2Estrutura[x].valor1 + "}," + " {" + programa1Estrutura[x].valor2 + ", " + programa2Estrutura[x].valor2 + "}\n";
+
+        if (programa1Estrutura[x].valor1 == 'ω') {
+            if (programa2Estrutura[x].valor1 != 'ω')  {
+                eEquivalente = false;
+            }
+        }
+
+        if (programa1Estrutura[x].valor2 == 'ω') {
+            if (programa2Estrutura[x].valor2 != 'ω')  {
+                eEquivalente = false;
+            }
+        }
+
+        if (programa1Estrutura[x].valor2 == 'Σ') {
+            if (programa2Estrutura[x].valor2 != 'Σ')  {
+                eEquivalente = false;
+            }
+        }
+
+        if (programa1Estrutura[x].valor2 == 'Σ') {
+            if (programa2Estrutura[x].valor2 != 'Σ')  {
+                eEquivalente = false;
+            }
+        }
+
     }
+
+    if (!eEquivalente) {
+        output += "\nProgramas diferente !"
+    } else {
+        output += "\nProgramas equivalentes !"
+    }
+
 
 
     return output;
@@ -41,9 +70,11 @@ const verificacaoForte = (programa1Estrutura, programa2Estrutura, verificacao) =
 const removeRepetidos = (input) => {
     
         var proc = toArray(input);
-    
+        var procNoLixo = removeLixo(input);
+
+
         var uniqueArray = proc.filter(function(item, pos) {
-            return input.indexOf(item.split(":")[1]) === pos.split(":")[1];
+            return procNoLixo.indexOf(item.split(":")[1]) === pos;
         });
     
         return array2String(uniqueArray);
@@ -101,6 +132,24 @@ const toArray = (input) => {
     }
 
     return array;
+}
+
+const removeLixo = (input) => {
+    var i = 0;
+    var j = 0;
+
+    var stringLimpa = [];
+    var linha = "";
+
+    while ((j = input.indexOf('\n', i)) !== -1) {
+        linha = input.substring(i, j);
+        stringLimpa.push(linha.split(":")[1]);
+
+        i = j + 1;
+      }
+      console.log(stringLimpa);
+      
+      return stringLimpa;
 }
 
 module.exports = {
