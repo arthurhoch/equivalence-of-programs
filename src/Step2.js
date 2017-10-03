@@ -7,29 +7,6 @@ const generateChainSets = (programa) => {
     programa = programa.split('\n').filter(function(item) {
         if (item !== "") {
             return item;
-    
-        // Remove os elementos do array que nao nao possuem nenhum valor
-        programa = programa.split('\n').filter(function(item) {
-            if (item !== "") {
-                return item;
-            }
-        });
-    
-        var chainSetLineCounter = 0; // Contador dos conjuntos gerados
-    
-        // Variavel acumuladora criada para concatenar todos os conjuntos gerados
-        // Ex: '2 = {Σ; 4; 3}'
-        var finiteChainSet = "A" + chainSetLineCounter + ' = {Σ} \n';
-        
-        // Variavel acumuladora criada com o intuito de armazenar os valores dos 
-        // conjuntos anteriores, separado do indice da nova linha gerada
-        // para concatena-los com os novos conjuntos gerados. Ex: '; 4; 3; 1'
-        var chainSet = ""; 
-        
-        // Obtem o indice da ultima parada do programa
-        var lastStopIndex = getLastStopIndex(programa);
-        if (lastStopIndex === -1) {
-            return 'O programa nao possui paradas!'
         }
     });
 
@@ -109,12 +86,6 @@ const generateChainSets = (programa) => {
                         chainSet += '; ' + newChainSet;
                     }
                 }
-    
-            var currentChainSet = "A" + chainSetLineCounter + ' = {Σ' + chainSet + '}' + '\n';
-            // Verifica se o novo conjunto gerado ja esta inserido no conjunto
-            var indexOf = finiteChainSet.search(currentChainSet.split('= ')[1]); // 1 = {Σ; 10}
-            if (indexOf === -1) {
-                finiteChainSet += currentChainSet;
             }
         }
 
