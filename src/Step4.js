@@ -9,14 +9,11 @@ const verificarEquivalencia = (programa1, programa2, p) => {
 
     var output = "B" + verificacao++ + " = {" + programa1[0] +", "+ programa2[0] +"}";
 
-    //var p1 = removeRepetidos(programa1);
-    //var p2 = removeRepetidos(programa2);
+    var p1 = removeRepetidos(programa1);
+    var p2 = removeRepetidos(programa2);
 
-    var programa1Estrutura = gerarEstrutura(programa1);
-    var programa2Estrutura = gerarEstrutura(programa2);
-
-    console.log(programa1Estrutura);
-
+    var programa1Estrutura = gerarEstrutura(p1);
+    var programa2Estrutura = gerarEstrutura(p2);
 
     if (true) {
         output += "\nProgramas diferente !"
@@ -43,11 +40,13 @@ const verificacaoForte = (programa1Estrutura, programa2Estrutura, verificacao) =
 
 const removeRepetidos = (input) => {
     
-        var uniqueArray = input.split("\n").filter(function(item, pos) {
+        var proc = toArray(input);
+    
+        var uniqueArray = proc.filter(function(item, pos) {
             return input.indexOf(item.split(":")[1]) === pos.split(":")[1];
         });
     
-        return uniqueArray;
+        return array2String(uniqueArray);
 }
 
 
@@ -78,6 +77,16 @@ const gerarEstrutura = (input) => {
     return array;
 
 
+}
+
+const array2String = (input) => {
+    var programa = "";
+    var i = 0;
+    for (i = 0; i < input.length; i++) {
+        programa += input[i] + "\n";
+    }
+
+    return programa;
 }
 
 const toArray = (input) => {
