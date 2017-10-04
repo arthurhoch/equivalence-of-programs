@@ -113,7 +113,7 @@ const getLastStopIndex = (arr) => {
         var lineSplited = arr[lineIndex].split(" ");
 
         // Verifica se a operacao eh uma parada
-        if (lineSplited[1] === '(parada,Σ),') {
+        if (lineSplited[1] === '(parada,Σ),' || lineSplited[2] === '(parada,Σ)') {
             index = lineIndex;
         }
     };
